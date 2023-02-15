@@ -1,10 +1,19 @@
 package mjz.springlibrary.librarybespring.dao;
 
 import mjz.springlibrary.librarybespring.entity.Book;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.web.bind.annotation.RequestParam;
 
 // new API interface
 public interface BookRepository extends JpaRepository<Book, Long> {
+
+    //Page is a sublist of a list of objects. It allows gain information about the position of it in the containing entire lis
+    // this method returns a pageable List of books, and will add "search": {"href": "http://localhost:8080/api/books/search"} as a new endpoint to our API _links (automatically by Spring Data REST)
+    //"http://localhost:8080/api/books/search/findByTitleContaining{?title,page,size,sort}
+    Page<Book> findByTitleContaining(@RequestParam("title") String title, Pageable pageable);
+
 }
 
 
