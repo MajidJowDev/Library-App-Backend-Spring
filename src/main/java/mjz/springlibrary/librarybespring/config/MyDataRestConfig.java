@@ -1,6 +1,7 @@
 package mjz.springlibrary.librarybespring.config;
 
 import mjz.springlibrary.librarybespring.entity.Book;
+import mjz.springlibrary.librarybespring.entity.Review;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestConfigurer;
@@ -28,8 +29,10 @@ public class MyDataRestConfig implements RepositoryRestConfigurer {
 
         config.exposeIdsFor(Book.class); // with this method we can Set the list of domain types for which we will expose the ID value as a normal property
         //config.exposeIdsFor(Book.class, Author.class, Review.class); we can add more classes if needed, loke so
+        config.exposeIdsFor(Review.class);
 
         disableHttpMethods(Book.class, config, theUnsupportedActions);
+        disableHttpMethods(Review.class, config, theUnsupportedActions);
 
         //*** Configure CORS mapping ***
         cors.addMapping(config.getBasePath() + "/**")
