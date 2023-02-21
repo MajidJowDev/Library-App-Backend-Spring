@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class ExtractJWT {
 
-    public static String payloadJWTExtraction(String token) {
+    public static String payloadJWTExtraction(String token, String extraction) {
         token = token.replace("Bearer ", "");
 
         // splitting token at the periods (. "dot"), JWT is in three pieces, "Header", "payload", and "signature" and each area is separated by a period (".")
@@ -22,7 +22,7 @@ public class ExtractJWT {
         for(String entry : entries) {
             String[] keyValue = entry.split(":"); // separates each entry by its key and value eg "name" : "Peter"
 
-            if(keyValue[0].equals("\"sub\"")) { // we need to extract the value for "sub" entry
+            if(keyValue[0].equals(extraction)) { // we need to extract the value for "sub" entry
 
                 int remove = 1;
                 if (keyValue[1].endsWith("}")) {
@@ -37,8 +37,8 @@ public class ExtractJWT {
 
         }
 
-        if(map.containsKey("\"sub\"")) {
-            return map.get("\"sub\"");
+        if(map.containsKey(extraction)) {
+            return map.get(extraction);
         }
 
         return null;

@@ -23,14 +23,14 @@ public class BookController {
     //You can check the access token payload information from jwt.io site
     @GetMapping("/secure/currentloans/count")
     public int currentLoansCount(@RequestHeader(value = "Authorization") String token) {
-        String userEmail = ExtractJWT.payloadJWTExtraction(token);// extract user email from JWT token "sub" //"testuser@email.com";
+        String userEmail = ExtractJWT.payloadJWTExtraction(token, "\"sub\"");// extract user email from JWT token "sub" //"testuser@email.com";
         return bookService.currentLoanCount(userEmail);
     }
 
     @GetMapping("/secure/ischeckedout/byuser")
     public Boolean checkoutBookByUser(@RequestHeader(value = "Authorization") String token,
                                       @RequestParam Long bookId) {
-        String userEmail = ExtractJWT.payloadJWTExtraction(token);
+        String userEmail = ExtractJWT.payloadJWTExtraction(token, "\"sub\"");
 
         return bookService.checkoutBookByUser(userEmail, bookId);
     }
@@ -38,7 +38,7 @@ public class BookController {
     @PutMapping("/secure/checkout")
     public Book checkoutBook(@RequestHeader(value = "Authorization") String token,
                              @RequestParam Long bookId) throws Exception {
-        String userEmail = ExtractJWT.payloadJWTExtraction(token);
+        String userEmail = ExtractJWT.payloadJWTExtraction(token, "\"sub\"");
         return bookService.checkoutBook(userEmail, bookId);
     }
 }
