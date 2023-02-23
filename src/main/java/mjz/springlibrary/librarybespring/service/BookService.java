@@ -81,8 +81,8 @@ public class BookService {
             bookIdList.add(i.getBookId());
         }
 
-        //todo
-       // List<Book> books = bookRepository.findBooksByBookIds(bookIdList);
+
+        List<Book> books = bookRepository.findBooksByBookIds(bookIdList);
         return null;
 
     }
