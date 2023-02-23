@@ -4,10 +4,13 @@ import mjz.springlibrary.librarybespring.dao.BookRepository;
 import mjz.springlibrary.librarybespring.dao.CheckoutRepository;
 import mjz.springlibrary.librarybespring.entity.Book;
 import mjz.springlibrary.librarybespring.entity.Checkout;
+import mjz.springlibrary.librarybespring.responsemodels.ShelfCurrentLoansResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -64,6 +67,24 @@ public class BookService {
     public int currentLoanCount(String userEmail) {
 
         return checkoutRepository.findBooksByUserEmail(userEmail).size();
+    }
+
+    public List<ShelfCurrentLoansResponse> currentLoans(String userEmail) throws Exception {
+
+        List<ShelfCurrentLoansResponse> shelfCurrentLoansResponses = new ArrayList<>();
+
+        List<Checkout> checkoutList = checkoutRepository.findBooksByUserEmail(userEmail);
+
+        List<Long> bookIdList = new ArrayList<>();
+
+        for(Checkout i: checkoutList) {
+            bookIdList.add(i.getBookId());
+        }
+
+        //todo
+       // List<Book> books = bookRepository.findBooksByBookIds(bookIdList);
+        return null;
+
     }
 
 }
