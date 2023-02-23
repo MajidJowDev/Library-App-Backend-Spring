@@ -1,10 +1,13 @@
 package mjz.springlibrary.librarybespring.controller;
 
 import mjz.springlibrary.librarybespring.entity.Book;
+import mjz.springlibrary.librarybespring.responsemodels.ShelfCurrentLoansResponse;
 import mjz.springlibrary.librarybespring.service.BookService;
 import mjz.springlibrary.librarybespring.utils.ExtractJWT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin("http://localhost:3000") // enables cross-origin resource sharing only for this specific method. By default, its allows all origins, all headers, and the HTTP methods specified in the
 @RestController
@@ -16,6 +19,12 @@ public class BookController {
     @Autowired // in spring 5 we can remove the Autowired annotation
     public BookController(BookService bookService) {
         this.bookService = bookService;
+    }
+
+    @GetMapping("/secure/currentloans")
+    public List<ShelfCurrentLoansResponse> currentLoans(@RequestHeader(value = "Authorization") String token) throws Exception {
+        String userEmail = ExtractJWT.payloadJWTExtraction(token, "\"sub\"");
+        return bookService.currentLoans(userEmail);
     }
 
     //we pass the JWT to backend endpoint and backend will verify the JWT and extract the information we need for the endpoint from the jwt

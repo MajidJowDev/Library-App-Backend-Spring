@@ -100,6 +100,7 @@ public class BookService {
 
                 TimeUnit time = TimeUnit.DAYS;
 
+                //if the result is positive number it means the book has n days left, if negative it means the book is n days late
                 long difference_In_Time = time.convert(d1.getTime() - d2.getTime(), TimeUnit.MILLISECONDS);
 
                 shelfCurrentLoansResponses.add(new ShelfCurrentLoansResponse(book, (int) difference_In_Time));
