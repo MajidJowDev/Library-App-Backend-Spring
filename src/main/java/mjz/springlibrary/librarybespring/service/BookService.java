@@ -8,10 +8,13 @@ import mjz.springlibrary.librarybespring.responsemodels.ShelfCurrentLoansRespons
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 
 @Service
@@ -83,7 +86,27 @@ public class BookService {
 
 
         List<Book> books = bookRepository.findBooksByBookIds(bookIdList);
-        return null;
+
+        // we want to compare dates to see how many days left until this book needs to be returned or how late the book is
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        for(Book book : books) {
+            Optional<Checkout> checkout = checkoutList.stream()
+                    .filter(co -> co.getBookId() == book.getId()).findFirst();
+
+            if(checkout.isPresent()) {
+                Date d1 = sdf.parse(checkout.get().getReturnDate());
+                Date d2 = sdf.parse(LocalDate.now().toString());
+
+                TimeUnit time = TimeUnit.DAYS;
+
+                long difference_In_Time = time.convert(d1.getTime() - d2.getTime(), TimeUnit.MILLISECONDS);
+
+                shelfCurrentLoansResponses.add(new ShelfCurrentLoansResponse(book, (int) difference_In_Time));
+            }
+        }
+
+        return shelfCurrentLoansResponses;
 
     }
 
