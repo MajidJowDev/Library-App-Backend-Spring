@@ -141,7 +141,7 @@ public class BookService {
         Date d2 = sdFormat.parse(LocalDate.now().toString());
 
         if(d1.compareTo(d2) > 0 || d1.compareTo(d2) == 0) {
-            validateCheckout.setCheckoutDate(LocalDate.now().plusDays(7).toString());
+            validateCheckout.setReturnDate(LocalDate.now().plusDays(7).toString());
             checkoutRepository.save(validateCheckout);
         }
     }
