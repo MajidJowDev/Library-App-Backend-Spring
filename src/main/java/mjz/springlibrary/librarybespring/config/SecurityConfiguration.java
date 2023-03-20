@@ -25,7 +25,8 @@ public class SecurityConfiguration {
                 configurer
                         .antMatchers("/api/books/secure/**",
                                 "/api/reviews/secure/**",
-                                "/api/messages/secure/**") // wild card for anything after secure/
+                                "/api/messages/secure/**",
+                                "/api/admin/secure/**") // wild card for anything after secure/
                         .authenticated())
                 .oauth2ResourceServer()
                 .jwt();
