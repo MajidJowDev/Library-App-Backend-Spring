@@ -1,6 +1,8 @@
 package mjz.springlibrary.librarybespring.service;
 
 import mjz.springlibrary.librarybespring.dao.BookRepository;
+import mjz.springlibrary.librarybespring.dao.CheckoutRepository;
+import mjz.springlibrary.librarybespring.dao.ReviewRepository;
 import mjz.springlibrary.librarybespring.entity.Book;
 import mjz.springlibrary.librarybespring.requestmodels.AddBookRequest;
 import org.springframework.stereotype.Service;
@@ -13,9 +15,13 @@ import java.util.Optional;
 public class AdminService {
 
     private final BookRepository bookRepository;
+    private final ReviewRepository reviewRepository;
+    private final CheckoutRepository checkoutRepository;
 
-    public AdminService(BookRepository bookRepository) {
+    public AdminService(BookRepository bookRepository, ReviewRepository reviewRepository, CheckoutRepository checkoutRepository) {
         this.bookRepository = bookRepository;
+        this.reviewRepository = reviewRepository;
+        this.checkoutRepository = checkoutRepository;
     }
 
     public void increaseBookQuantity(Long bookId) throws Exception {
@@ -56,5 +62,19 @@ public class AdminService {
         book.setCategory(addBookRequest.getCategory());
         book.setImg(addBookRequest.getImg());
         bookRepository.save(book);
+    }
+
+    public void deleteBook(Long bookId) throws Exception {
+
+        Optional<Book> book = bookRepository.findById(bookId);
+
+        if(!book.isPresent()) {
+            throw new Exception("Book not found");
+        }
+
+        bookRepository.delete(book.get());
+        checkoutRepository.deleteAllByBookId(bookId);
+        reviewRepository.deleteAllByBookId(bookId);
+
     }
 }
